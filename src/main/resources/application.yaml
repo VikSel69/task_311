@@ -2,12 +2,34 @@ server:
   port: 8080
   servlet:
     context-path: /
+
 spring:
+  application:
+    name: JM Spring Boot
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/dbusers?createDatabaseIfNotExist=true&verifyServerCertificate=false&useSSL=false&requireSSL=false&serverTimezone=Asia/Irkutsk&useLegacyDatetimeCode=false
+    url: jdbc:mysql://localhost:3306/task_311?verifyServerCertificate=false&useSSL=false&requireSSL=false&serverTimezone=Asia/Irkutsk&useLegacyDatetimeCode=false
     username: root
     password: root
   jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
     properties:
-      hiber
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        hbm2ddl:
+          charset_name: UTF-8
+          import_files: init-data.sql
+    open-in-view: false
+  devtools:
+    livereload:
+      enabled: true
+    add-properties: true
+
+logging:
+  charset:
+    console: UTF-8
