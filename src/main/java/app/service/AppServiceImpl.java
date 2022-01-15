@@ -10,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
@@ -44,10 +42,6 @@ public class AppServiceImpl implements AppService {
         return roleRepository.findAll();
     }
 
-    public Role findByRole(String role) {
-        return roleRepository.findByRole(role);
-    }
-
     @Override
     public List<User> findAllUsers() {
         return userRepository.findAll(Sort.by(Sort.Direction.ASC, "firstName", "lastName"));
@@ -63,8 +57,8 @@ public class AppServiceImpl implements AppService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         try {
-            userRepository.save(user);
-        } catch (PersistenceException e) { // org.hibernate.exception.ConstraintViolationException;
+            userRepository.saveAndFlush(user);
+        } catch (PersistenceException e) {
             return false;
         }
         return true;

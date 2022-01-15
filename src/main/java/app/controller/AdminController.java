@@ -8,9 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -33,38 +31,18 @@ public class AdminController {
     @GetMapping("/new")
     public String getNewUserPage(Model model) {
         model.addAttribute("user", new User());
-        return "new";
-    }
-
-    @PostMapping("/new")
-    public String createUser(@ModelAttribute("user") User user, @RequestParam(defaultValue = "false") boolean checkbox_admin,
-                             @RequestParam(defaultValue = "false") boolean checkbox_user, @RequestParam(defaultValue = "false") boolean checkbox_enabled) {
-        Set<Role> roles = new HashSet<>();
-        if (checkbox_admin) roles.add(appService.findByRole("ADMIN"));
-        if (checkbox_user) roles.add(appService.findByRole("USER"));
-        user.setEnabled(checkbox_enabled);
-        user.setRoles(roles);
-        System.out.println(user);
-        return appService.saveUser(user) ? "redirect:/admin" : "edit";
+        return "user-form";
     }
 
     @GetMapping("/{id}/edit")
     public String editUserPage(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", appService.findUser(id));
-        return "edit";
+        return "user-form";
     }
 
-    @PostMapping("/{id}/edit")
-    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") Long id, @RequestParam(defaultValue = "false") boolean checkbox_admin,
-                             @RequestParam(defaultValue = "false") boolean checkbox_user, @RequestParam(defaultValue = "false") boolean checkbox_enabled) {
-        Set<Role> roles = new HashSet<>();
-        if (checkbox_admin) roles.add(appService.findByRole("ADMIN"));
-        if (checkbox_user) roles.add(appService.findByRole("USER"));
-        user.setId(id);
-        user.setEnabled(checkbox_enabled);
-        user.setRoles(roles);
-        System.out.println(user);
-        return appService.saveUser(user) ? "redirect:/admin" : "edit";
+    @PostMapping
+    public String createUser(@ModelAttribute("user") User user) {
+        return appService.saveUser(user) ? "redirect:/admin" : "user-form";
     }
 
     @GetMapping("/{id}/delete")

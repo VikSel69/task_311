@@ -3,16 +3,12 @@ package app.service;
 import app.model.Role;
 import app.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
 public interface AppService extends UserDetailsService {
 
     List<User> findAllUsers();
-
-    Role findByRole(String role);
 
     User findUser(Long userId) throws NullPointerException;
 

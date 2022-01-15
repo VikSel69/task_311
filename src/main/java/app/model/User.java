@@ -5,6 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.*;
 
 @Entity
@@ -16,19 +18,22 @@ public class User implements UserDetails {
     protected Long id;
 
     @Column(name = "first_name")
+    @NotEmpty(message = "Name should not be empty")
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
 
     @Column(unique = true)
+    @NotEmpty(message = "Email should not be empty")
+    @Email(message = "Email should be valid")
     private String email;
 
     private String password;
 
     private boolean enabled;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
     private Set<Role> roles = new HashSet<>();
 
