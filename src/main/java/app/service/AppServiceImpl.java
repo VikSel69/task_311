@@ -44,6 +44,10 @@ public class AppServiceImpl implements AppService {
         return roleRepository.findAll();
     }
 
+    public Role findByRole(String role) {
+        return roleRepository.findByRole(role);
+    }
+
     @Override
     public List<User> findAllUsers() {
         return userRepository.findAll(Sort.by(Sort.Direction.ASC, "firstName", "lastName"));
@@ -55,21 +59,14 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public boolean saveUser(User user, BindingResult bindingResult, Model model) {
-        model.addAttribute("allRoles", findAllRoles());
-
-        if (bindingResult.hasErrors()) {
-            return false;
-        }
+    public boolean saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         try {
             userRepository.save(user);
-        } catch (PersistenceException e) { // org.hibernate.exception.ConstraintViolationException
-            model.addAttribute("persistenceException", true);
+        } catch (PersistenceException e) { // org.hibernate.exception.ConstraintViolationException;
             return false;
         }
-
         return true;
     }
 

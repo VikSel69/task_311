@@ -16,29 +16,30 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item" sec:authorize="isAnonymous()">
-                    <a class="btn btn-outline-light" type="button" th:href="@{/user}">Log in</a></li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="btn btn-outline-light" type="button" th:href="@{/user}">Your page</a></li>
+                <li class="nav-item"><a type="button" th:href="@{/}" class="btn btn-outline-light">Home</a></li>
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="btn btn-outline-light" type="button" th:href="@{/admin}">Users list</a></li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="btn btn-outline-light" type="button" th:href="@{/logout}">Logout</a></li>
+                    <a type="button" th:href="@{/admin}" class="btn btn-outline-light">Users list</a></li>
+                <li class="nav-item"><a type="button" th:href="@{/logout}" class="btn btn-outline-light">Logout</a></li>
             </ul>
         </div>
     </div>
 </nav>
-<div class="container pt-4">
+<div class="container pt-4" th:object="${user}">
     <div class="row d-flex justify-content-center">
-        <div class="jumbotron text-center">
-            <h1 class="mt-6">JAVA MENTOR</h1>
-            <p class="lead">Практическая задача 3.1.1</p>
-            <ul class="list-unstyled">
-                <li>Spring Boot</li>
-                <li>Spring MVC</li>
-                <li>Hibernate</li>
-                <li>Spring Security</li>
-            </ul>
+        <div class="col-auto">
+            <div class="jumbotron">
+                <p class="display-4">User info page</p>
+                <hr class="my-4">
+                <p><b>Hello, </b><span th:text="*{getFullName()}"/></p>
+                <p><b>Your email </b><span th:text="*{email}"/></p>
+                <p>
+                    <b>and roles:</b>
+                    <th:block th:each="role : *{getRoles()}">
+                        &nbsp;<span th:text="${role.getRole()}"/>
+                    </th:block>
+                </p>
+                <p><b>Is enabled: </b><span th:text="*{enabled}"/></p>
+            </div>
         </div>
     </div>
 </div>
